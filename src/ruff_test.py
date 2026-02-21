@@ -21,15 +21,15 @@ logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
 
-def add_func(x, y):
+def add_func(x: int | float, y: int | float) -> int | float:
     return x + y
 
 
-def show_data(df):
-    return df.style
+def show_data(df: pd.DataFrame) -> None:
+    print(df)
 
 
-def main():
+def main() -> int:
     load_dotenv()
     passwd = os.getenv("PASSWORD")
 
