@@ -1,0 +1,53 @@
+[project]
+name = "data-pipeline-pro"
+version = "0.1.0"
+description = "DS/ML Pipeline with Conda & Static Analysis"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "numpy",
+    "pydantic>=2.0",
+]
+
+# Modern 2026 standard for dev tools
+[dependency-groups]
+dev = [
+    "ruff>=0.8.0",
+    "mypy>=1.14.0",
+    "pytest>=8.0.0",
+    "pytest-cov",
+    "pandas-stubs", # Crucial for Mypy + Pandas
+]
+
+# --- RUFF CONFIGURATION ---
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+# E: pycodestyle, F: Pyflakes, I: isort, B: flake8-bugbear, UP: pyupgrade, N: pep8-naming
+select = ["E", "F", "I", "B", "UP", "N"]
+ignore = ["E501"] # Formatter handles long lines; no need for linter to nag
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# --- MYPY CONFIGURATION ---
+[tool.mypy]
+python_version = "3.11"
+strict = true
+show_error_codes = true
+warn_unused_configs = true
+# Essential for Conda: ignore libs without stubs so mypy doesn't crash on niche ML libs
+ignore_missing_imports = true 
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false # Relax for tests to stay productive
+
+# --- PYTEST CONFIGURATION ---
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers --cov=src --cov-report=term-missing"
